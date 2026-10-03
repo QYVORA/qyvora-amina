@@ -1,0 +1,4 @@
+/bin/
+/reports/*
+!/reports/.gitkeep
+*.tmp

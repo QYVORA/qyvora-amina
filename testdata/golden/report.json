@@ -1,0 +1,553 @@
+{
+  "schema": "qyvora.amina.report/v1",
+  "id": "rep-196f434e264d42e79bee766f",
+  "framework": "amina",
+  "framework_version": "v0.1.0",
+  "generated_at": "2023-11-14T22:13:20Z",
+  "target": {
+    "id": "sim-builtin",
+    "name": "build-01",
+    "type": "simulation",
+    "value": "builtin",
+    "platform": "linux",
+    "authorization": {
+      "granted": true,
+      "granted_at": "0001-01-01T00:00:00Z",
+      "scope": "simulation fixture"
+    },
+    "created_at": "1970-01-01T00:00:00Z"
+  },
+  "depth": 2,
+  "depth_name": "standard",
+  "duration_ms": 0,
+  "host": {
+    "hostname": "build-01",
+    "platform": "linux",
+    "kernel": "6.8.0-generic",
+    "os": "Ubuntu 24.04",
+    "arch": "amd64",
+    "local_user": "aisha",
+    "timezone": "UTC",
+    "locale": "en_US.UTF-8",
+    "shell": "/bin/bash"
+  },
+  "findings": [
+    {
+      "id": "",
+      "target_id": "sim-builtin",
+      "rule_id": "NET-001",
+      "module_id": "network",
+      "title": "Service sshd listening on all interfaces, port 22",
+      "category": "network",
+      "description": "A socket bound to a wildcard address accepts connections from every network the host is attached to, not only from this machine.",
+      "impact": "A socket bound to a wildcard address accepts connections from every network the host is attached to, not only from this machine.",
+      "recommendation": "Bind to a specific interface or to loopback unless remote reachability is intended.",
+      "severity": "high",
+      "confidence": "observed",
+      "status": "detected",
+      "state": "observed",
+      "exposure": "wildcard",
+      "privilege": "none",
+      "sensitivity": "internal",
+      "correlated": false,
+      "objects": [
+        "0.0.0.0:22"
+      ],
+      "evidence": [
+        {
+          "id": "",
+          "kind": "observation",
+          "source": "sshd",
+          "location": "0.0.0.0:22",
+          "redaction": {
+            "mode": ""
+          },
+          "hash": "",
+          "state": "",
+          "collected_at": "0001-01-01T00:00:00Z",
+          "timestamp": "0001-01-01T00:00:00Z"
+        }
+      ],
+      "attributes": {
+        "pid": "0",
+        "port": "22",
+        "process": "sshd",
+        "proto": "tcp",
+        "risk_band": "high",
+        "risk_formula": "score = (0.40*impact + 0.20*exploitability + 0.20*exposure + 0.10*privilege)*25 + sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.",
+        "risk_raw": "92.5",
+        "risk_score": "83.3"
+      },
+      "timestamp": "2023-11-14T22:13:20Z"
+    },
+    {
+      "id": "",
+      "target_id": "sim-builtin",
+      "rule_id": "NET-002",
+      "module_id": "network",
+      "title": "Secure Shell exposed on port 22",
+      "category": "remote_access",
+      "description": "A remote-administration port bound to a wildcard address is reachable from every network the host touches.",
+      "impact": "A remote-administration port bound to a wildcard address is reachable from every network the host touches.",
+      "recommendation": "Restrict the listener to loopback or a VPN interface, and require a jump host for administrative access.",
+      "severity": "high",
+      "confidence": "observed",
+      "status": "detected",
+      "state": "observed",
+      "exposure": "wildcard",
+      "privilege": "none",
+      "sensitivity": "internal",
+      "correlated": false,
+      "objects": [
+        "0.0.0.0:22"
+      ],
+      "attributes": {
+        "port": "22",
+        "process": "sshd",
+        "risk_band": "high",
+        "risk_formula": "score = (0.40*impact + 0.20*exploitability + 0.20*exposure + 0.10*privilege)*25 + sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.",
+        "risk_raw": "92.5",
+        "risk_score": "83.3",
+        "service": "Secure Shell"
+      },
+      "timestamp": "2023-11-14T22:13:20Z"
+    },
+    {
+      "id": "",
+      "target_id": "sim-builtin",
+      "rule_id": "SEC-002",
+      "module_id": "secret-material",
+      "title": "Credential material present",
+      "category": "credentials",
+      "description": "A credential stored in a file is readable by every process running as that user and by anything that later obtains them.",
+      "impact": "A credential stored in a file is readable by every process running as that user and by anything that later obtains them.",
+      "recommendation": "Move the credential to a secret store or an agent, and rotate the exposed value.",
+      "severity": "high",
+      "confidence": "confirmed",
+      "status": "confirmed",
+      "state": "observed",
+      "exposure": "local",
+      "privilege": "user",
+      "sensitivity": "secret",
+      "correlated": false,
+      "objects": [
+        "/home/aisha/.aws/credentials"
+      ],
+      "attributes": {
+        "fingerprint": "0a1b2c3d4e5f60718293a4b5c6d7e8f",
+        "risk_band": "high",
+        "risk_formula": "score = (0.40*impact + 0.20*exploitability + 0.20*exposure + 0.10*privilege)*25 + sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.",
+        "risk_raw": "75.0",
+        "risk_score": "75.0",
+        "type": "token"
+      },
+      "timestamp": "2023-11-14T22:13:20Z"
+    },
+    {
+      "id": "",
+      "target_id": "sim-builtin",
+      "rule_id": "IDN-002",
+      "module_id": "environment",
+      "title": "Login name disclosed in the environment",
+      "category": "metadata",
+      "description": "The login name travels with many ordinary operations and appears in logs, prompts and process listings.",
+      "impact": "The login name travels with many ordinary operations and appears in logs, prompts and process listings.",
+      "recommendation": "Use a generic service account name for anything that runs unattended.",
+      "severity": "informational",
+      "confidence": "observed",
+      "status": "detected",
+      "state": "observed",
+      "exposure": "local",
+      "privilege": "user",
+      "sensitivity": "internal",
+      "correlated": false,
+      "objects": [
+        "aisha"
+      ],
+      "attributes": {
+        "risk_band": "low",
+        "risk_formula": "score = (0.40*impact + 0.20*exploitability + 0.20*exposure + 0.10*privilege)*25 + sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.",
+        "risk_raw": "37.5",
+        "risk_score": "33.8",
+        "user": "aisha"
+      },
+      "timestamp": "2023-11-14T22:13:20Z"
+    },
+    {
+      "id": "",
+      "target_id": "sim-builtin",
+      "rule_id": "ACC-003",
+      "module_id": "accounts",
+      "title": "Account with no last-login record",
+      "category": "account",
+      "description": "An interactive account with no observable last-login record may be dormant, which keeps an unnecessary authentication path alive.",
+      "impact": "An interactive account with no observable last-login record may be dormant, which keeps an unnecessary authentication path alive.",
+      "recommendation": "Confirm the account is still required; disable or remove it otherwise.",
+      "severity": "low",
+      "confidence": "possible",
+      "status": "detected",
+      "state": "inferred",
+      "exposure": "local",
+      "privilege": "user",
+      "sensitivity": "internal",
+      "correlated": false,
+      "objects": [
+        "aisha"
+      ],
+      "attributes": {
+        "home": "/home/aisha",
+        "risk_band": "low",
+        "risk_formula": "score = (0.40*impact + 0.20*exploitability + 0.20*exposure + 0.10*privilege)*25 + sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.",
+        "risk_raw": "47.5",
+        "risk_score": "19.0",
+        "shell": "/bin/bash"
+      },
+      "timestamp": "2023-11-14T22:13:20Z"
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "by_severity": {
+      "high": 3,
+      "informational": 1,
+      "low": 1
+    },
+    "by_category": {
+      "account": 1,
+      "credentials": 1,
+      "metadata": 1,
+      "network": 1,
+      "remote_access": 1
+    },
+    "by_state": {
+      "inferred": 1,
+      "observed": 4
+    },
+    "max_risk": 83,
+    "mean_risk": 58,
+    "risk_band": "high",
+    "correlated": 0,
+    "identity_count": 1
+  },
+  "modules": [
+    {
+      "id": "accounts",
+      "name": "User and Account Audit",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "artifacts-logs",
+      "name": "Logging and Local Artifacts",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "binary-integrity",
+      "name": "Binary Integrity",
+      "domain": "",
+      "status": "skipped",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0,
+      "reason": "requires depth 3 (running at 2)"
+    },
+    {
+      "id": "browser-apps",
+      "name": "Browser and User Application Exposure",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "cloud-identity",
+      "name": "Cloud and Infrastructure Identity",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "developer-identity",
+      "name": "Git and Developer Identity",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "environment",
+      "name": "Environment Variables",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "file-permissions",
+      "name": "File Permissions",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "filesystem-exposure",
+      "name": "Filesystem Exposure",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "host-identity",
+      "name": "Host Identity",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "metadata",
+      "name": "Metadata Exposure",
+      "domain": "",
+      "status": "skipped",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0,
+      "reason": "requires depth 3 (running at 2)"
+    },
+    {
+      "id": "network",
+      "name": "Network Exposure",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "os-posture",
+      "name": "OS Security Posture",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "package-sources",
+      "name": "Package Source Audit",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "persistence",
+      "name": "Persistence and Startup",
+      "domain": "",
+      "status": "skipped",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0,
+      "reason": "requires depth 3 (running at 2)"
+    },
+    {
+      "id": "process-service",
+      "name": "Process and Service Audit",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "provenance",
+      "name": "Software Provenance",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "remote-access",
+      "name": "SSH and Remote Access",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "secret-material",
+      "name": "Secret Detection",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "shell-terminal",
+      "name": "Shell and Terminal Exposure",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "software",
+      "name": "Software Inventory",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "temp-cache",
+      "name": "Temporary and Cache Data",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "tooling",
+      "name": "Development and Security Tooling",
+      "domain": "",
+      "status": "complete",
+      "assets": 0,
+      "findings": 0,
+      "duration_ms": 0
+    }
+  ],
+  "identities": [
+    {
+      "id": "ident-4553cef08ece",
+      "canonical": "aisha@corp.example",
+      "strength": 23,
+      "signal_count": 1,
+      "signals": [
+        {
+          "type": "email",
+          "value": "aisha@corp.example",
+          "source": "email",
+          "domain": "mail",
+          "module_id": "developer-identity",
+          "at": "2023-11-14T22:13:20Z"
+        }
+      ],
+      "sources": [
+        "email"
+      ],
+      "domains": [
+        "mail"
+      ],
+      "summary": "Identity aisha@corp.example is disclosed by 1 signal across 1 kind of observation, from 1 source and 1 domain."
+    }
+  ],
+  "secrets": [
+    {
+      "type": "token",
+      "location": "/home/aisha/.aws/credentials",
+      "line": 3,
+      "field": "aws_secret_access_key",
+      "fingerprint": "0a1b2c3d4e5f60718293a4b5c6d7e8f",
+      "length": 40,
+      "source": "secrets",
+      "redaction": "fingerprint"
+    }
+  ],
+  "package_sources": [
+    {
+      "id": "src-apt",
+      "provider": "apt",
+      "kind": "apt",
+      "uri": "http://archive.ubuntu.com/ubuntu",
+      "trust": "official",
+      "keys": 3,
+      "enabled": true
+    },
+    {
+      "id": "src-pypi",
+      "provider": "pip",
+      "kind": "pip",
+      "uri": "https://pypi.org/simple",
+      "trust": "official",
+      "keys": 0,
+      "enabled": true
+    }
+  ],
+  "assets": [
+    {
+      "id": "asset-1",
+      "kind": "listening_socket",
+      "domain": "network",
+      "name": "0.0.0.0:22",
+      "platform": "linux",
+      "support": "",
+      "source": "network",
+      "exposure": "public",
+      "timestamp": "2023-11-14T22:13:20Z"
+    }
+  ],
+  "skipped": [
+    {
+      "id": "META-001",
+      "kind": "",
+      "reason": "requires depth 3, running at 2"
+    },
+    {
+      "id": "META-002",
+      "kind": "",
+      "reason": "requires depth 3, running at 2"
+    },
+    {
+      "id": "PER-001",
+      "kind": "",
+      "reason": "requires depth 3, running at 2"
+    },
+    {
+      "id": "PER-002",
+      "kind": "",
+      "reason": "requires depth 3, running at 2"
+    },
+    {
+      "id": "PER-003",
+      "kind": "",
+      "reason": "requires depth 3, running at 2"
+    }
+  ],
+  "limitations": [
+    "Binary Integrity: not assessed (requires depth 3 (running at 2))",
+    "Metadata Exposure: not assessed (requires depth 3 (running at 2))",
+    "Persistence and Startup: not assessed (requires depth 3 (running at 2))",
+    "5 rule(s) not evaluated (requires depth 3, running at 2): META-001, META-002, PER-001, PER-002, PER-003"
+  ],
+  "integrity": "sha256:196f434e264d42e79bee766f4894709baaf3abaa1e876fe18a79275f5c593869",
+  "redaction": {
+    "strategy": "fingerprint-only",
+    "values_retained": false,
+    "note": "No secret value is stored in this report. Each secret is recorded as a salted fingerprint, its location and its length; the value itself is discarded by the collector that read it."
+  }
+}

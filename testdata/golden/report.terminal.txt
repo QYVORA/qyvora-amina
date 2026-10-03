@@ -1,0 +1,85 @@
+Amina operational security assessment
+────────────────────────────────────────────────────────────
+  Host: build-01 · linux
+  Assessed: 2023-11-14T22:13:20Z
+  Depth: standard
+  Mode: simulation — no live host was read for this report
+
+Summary  5 findings  ·  highest risk HIGH (83)  ·  mean 58
+  ▲ High 3  ·  ▲ Low 1  ·  · Informational 1
+
+What this run did not see
+  ! Binary Integrity: not assessed (requires depth 3 (running at 2))
+  ! Metadata Exposure: not assessed (requires depth 3 (running at 2))
+  ! Persistence and Startup: not assessed (requires depth 3 (running at 2))
+  ! 5 rule(s) not evaluated (requires depth 3, running at 2): META-001, META-002, PER-001, PER-002, PER-003
+
+Correlated operator identities
+  aisha@corp.example  strength 23 · 1 signal from mail
+    Identity aisha@corp.example is disclosed by 1 signal across 1 kind of observation, from 1 source and 1 domain.
+
+Findings
+
+▲High  (3)
+  Service sshd listening on all interfaces, port 22
+    NET-001 · network · risk 83 (high) · observed
+    · 0.0.0.0:22
+    impact: A socket bound to a wildcard address accepts connections from every network the host is attached to, not only from this machine.
+    fix: Bind to a specific interface or to loopback unless remote reachability is intended.
+  Secure Shell exposed on port 22
+    NET-002 · network · risk 83 (high) · observed
+    · 0.0.0.0:22
+    impact: A remote-administration port bound to a wildcard address is reachable from every network the host touches.
+    fix: Restrict the listener to loopback or a VPN interface, and require a jump host for administrative access.
+  Credential material present
+    SEC-002 · secret-material · risk 75 (high) · observed
+    · /home/aisha/.aws/credentials
+    impact: A credential stored in a file is readable by every process running as that user and by anything that later obtains them.
+    fix: Move the credential to a secret store or an agent, and rotate the exposed value.
+
+▲Low  (1)
+  Account with no last-login record
+    ACC-003 · accounts · risk 19 (low) · inferred
+    · aisha
+    impact: An interactive account with no observable last-login record may be dormant, which keeps an unnecessary authentication path alive.
+    fix: Confirm the account is still required; disable or remove it otherwise.
+
+·Informational  (1)
+  Login name disclosed in the environment
+    IDN-002 · environment · risk 33 (low) · observed
+    · aisha
+    impact: The login name travels with many ordinary operations and appears in logs, prompts and process listings.
+    fix: Use a generic service account name for anything that runs unattended.
+
+Secret material on disk (1 found, values not read into this report)
+  token  1
+    /home/aisha/.aws/credentials  0a1b2c3d4e5f60718293a4b5c6d7e8f… 40 bytes
+
+Module coverage (a module that did not run is reported, not hidden)
+  – not assessed  3
+    Binary Integrity  binary-integrity · 0 assets · 0 findings  requires depth 3 (running at 2)
+    Metadata Exposure  metadata · 0 assets · 0 findings  requires depth 3 (running at 2)
+    Persistence and Startup  persistence · 0 assets · 0 findings  requires depth 3 (running at 2)
+  ● complete  20
+    User and Account Audit  accounts · 0 assets · 0 findings
+    Logging and Local Artifacts  artifacts-logs · 0 assets · 0 findings
+    Browser and User Application Exposure  browser-apps · 0 assets · 0 findings
+    Cloud and Infrastructure Identity  cloud-identity · 0 assets · 0 findings
+    Git and Developer Identity  developer-identity · 0 assets · 0 findings
+    Environment Variables  environment · 0 assets · 0 findings
+    File Permissions  file-permissions · 0 assets · 0 findings
+    Filesystem Exposure  filesystem-exposure · 0 assets · 0 findings
+    Host Identity  host-identity · 0 assets · 0 findings
+    Network Exposure  network · 0 assets · 0 findings
+    OS Security Posture  os-posture · 0 assets · 0 findings
+    Package Source Audit  package-sources · 0 assets · 0 findings
+    Process and Service Audit  process-service · 0 assets · 0 findings
+    Software Provenance  provenance · 0 assets · 0 findings
+    SSH and Remote Access  remote-access · 0 assets · 0 findings
+    Secret Detection  secret-material · 0 assets · 0 findings
+    Shell and Terminal Exposure  shell-terminal · 0 assets · 0 findings
+    Software Inventory  software · 0 assets · 0 findings
+    Temporary and Cache Data  temp-cache · 0 assets · 0 findings
+    Development and Security Tooling  tooling · 0 assets · 0 findings
+
+report rep-196f434e264d42e79bee766f  ·  integrity 196f434e264d42e7  ·  no secret values are stored in this report

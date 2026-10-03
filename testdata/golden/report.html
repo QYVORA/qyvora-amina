@@ -1,0 +1,246 @@
+
+<div class="cards">
+  <div class="card"><div class="n">5</div><div class="k">Findings</div></div>
+  <div class="card"><div class="n">83</div><div class="k">Highest risk</div></div>
+  <div class="card"><div class="n">high</div><div class="k">Risk band</div></div>
+  <div class="card"><div class="n">1</div><div class="k">Identities</div></div>
+</div>
+<table>
+<tr><th>Severity</th><th>Count</th></tr>
+<tr><td>High</td><td>3</td></tr>
+<tr><td>Low</td><td>1</td></tr>
+<tr><td>Informational</td><td>1</td></tr>
+</table>
+
+
+<h2>What this run did not see</h2>
+<div class="note"><strong>A finding is only as good as the coverage behind it.</strong>
+The following was not fully assessed:</div>
+<ul class="compact"><li>Binary Integrity: not assessed (requires depth 3 (running at 2))</li><li>Metadata Exposure: not assessed (requires depth 3 (running at 2))</li><li>Persistence and Startup: not assessed (requires depth 3 (running at 2))</li><li>5 rule(s) not evaluated (requires depth 3, running at 2): META-001, META-002, PER-001, PER-002, PER-003</li></ul>
+
+
+
+<h2>Correlated operator identities</h2>
+<table><tr><th>Identity</th><th>Strength</th><th>Signals</th><th>Domains</th></tr>
+<tr><td class="mono">aisha@corp.example</td><td>23</td>
+<td>1</td><td>mail</td></tr>
+</table>
+
+
+<h2>Findings</h2>
+
+<section class="finding">
+<h3><span class="badge sev-high">high</span>
+Service sshd listening on all interfaces, port 22</h3>
+<table>
+<tr><th>Rule</th><td class="mono">NET-001</td>
+    <th>Module</th><td class="mono">network</td></tr>
+<tr><th>Risk</th><td>83 (high)</td>
+    <th>State</th><td>observed</td></tr>
+<tr><th>Exposure</th><td>wildcard</td>
+    <th>Privilege</th><td>none</td></tr>
+<tr><th>Confidence</th><td>observed</td>
+    <th>Sensitivity</th><td>internal</td></tr>
+</table>
+<p>A socket bound to a wildcard address accepts connections from every network the host is attached to, not only from this machine.</p>
+<p><strong>Applies to</strong></p><ul class="compact">
+<li class="mono">0.0.0.0:22</li></ul>
+
+<p><strong>Impact.</strong> A socket bound to a wildcard address accepts connections from every network the host is attached to, not only from this machine.</p>
+<p><strong>Recommendation.</strong> Bind to a specific interface or to loopback unless remote reachability is intended.</p>
+
+<details><summary>Evidence attributes</summary><table>
+<tr><th>pid</th><td class="mono">0</td></tr><tr><th>port</th><td class="mono">22</td></tr><tr><th>process</th><td class="mono">sshd</td></tr><tr><th>proto</th><td class="mono">tcp</td></tr><tr><th>risk_band</th><td class="mono">high</td></tr><tr><th>risk_formula</th><td class="mono">score = (0.40*impact &#43; 0.20*exploitability &#43; 0.20*exposure &#43; 0.10*privilege)*25 &#43; sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.</td></tr><tr><th>risk_raw</th><td class="mono">92.5</td></tr><tr><th>risk_score</th><td class="mono">83.3</td></tr>
+</table></details>
+</section>
+<section class="finding">
+<h3><span class="badge sev-high">high</span>
+Secure Shell exposed on port 22</h3>
+<table>
+<tr><th>Rule</th><td class="mono">NET-002</td>
+    <th>Module</th><td class="mono">network</td></tr>
+<tr><th>Risk</th><td>83 (high)</td>
+    <th>State</th><td>observed</td></tr>
+<tr><th>Exposure</th><td>wildcard</td>
+    <th>Privilege</th><td>none</td></tr>
+<tr><th>Confidence</th><td>observed</td>
+    <th>Sensitivity</th><td>internal</td></tr>
+</table>
+<p>A remote-administration port bound to a wildcard address is reachable from every network the host touches.</p>
+<p><strong>Applies to</strong></p><ul class="compact">
+<li class="mono">0.0.0.0:22</li></ul>
+
+<p><strong>Impact.</strong> A remote-administration port bound to a wildcard address is reachable from every network the host touches.</p>
+<p><strong>Recommendation.</strong> Restrict the listener to loopback or a VPN interface, and require a jump host for administrative access.</p>
+
+<details><summary>Evidence attributes</summary><table>
+<tr><th>port</th><td class="mono">22</td></tr><tr><th>process</th><td class="mono">sshd</td></tr><tr><th>risk_band</th><td class="mono">high</td></tr><tr><th>risk_formula</th><td class="mono">score = (0.40*impact &#43; 0.20*exploitability &#43; 0.20*exposure &#43; 0.10*privilege)*25 &#43; sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.</td></tr><tr><th>risk_raw</th><td class="mono">92.5</td></tr><tr><th>risk_score</th><td class="mono">83.3</td></tr><tr><th>service</th><td class="mono">Secure Shell</td></tr>
+</table></details>
+</section>
+<section class="finding">
+<h3><span class="badge sev-high">high</span>
+Credential material present</h3>
+<table>
+<tr><th>Rule</th><td class="mono">SEC-002</td>
+    <th>Module</th><td class="mono">secret-material</td></tr>
+<tr><th>Risk</th><td>75 (high)</td>
+    <th>State</th><td>observed</td></tr>
+<tr><th>Exposure</th><td>local</td>
+    <th>Privilege</th><td>user</td></tr>
+<tr><th>Confidence</th><td>confirmed</td>
+    <th>Sensitivity</th><td>secret</td></tr>
+</table>
+<p>A credential stored in a file is readable by every process running as that user and by anything that later obtains them.</p>
+<p><strong>Applies to</strong></p><ul class="compact">
+<li class="mono">/home/aisha/.aws/credentials</li></ul>
+
+<p><strong>Impact.</strong> A credential stored in a file is readable by every process running as that user and by anything that later obtains them.</p>
+<p><strong>Recommendation.</strong> Move the credential to a secret store or an agent, and rotate the exposed value.</p>
+
+<details><summary>Evidence attributes</summary><table>
+<tr><th>fingerprint</th><td class="mono">0a1b2c3d4e5f60718293a4b5c6d7e8f</td></tr><tr><th>risk_band</th><td class="mono">high</td></tr><tr><th>risk_formula</th><td class="mono">score = (0.40*impact &#43; 0.20*exploitability &#43; 0.20*exposure &#43; 0.10*privilege)*25 &#43; sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.</td></tr><tr><th>risk_raw</th><td class="mono">75.0</td></tr><tr><th>risk_score</th><td class="mono">75.0</td></tr><tr><th>type</th><td class="mono">token</td></tr>
+</table></details>
+</section>
+<section class="finding">
+<h3><span class="badge sev-info">informational</span>
+Login name disclosed in the environment</h3>
+<table>
+<tr><th>Rule</th><td class="mono">IDN-002</td>
+    <th>Module</th><td class="mono">environment</td></tr>
+<tr><th>Risk</th><td>33 (low)</td>
+    <th>State</th><td>observed</td></tr>
+<tr><th>Exposure</th><td>local</td>
+    <th>Privilege</th><td>user</td></tr>
+<tr><th>Confidence</th><td>observed</td>
+    <th>Sensitivity</th><td>internal</td></tr>
+</table>
+<p>The login name travels with many ordinary operations and appears in logs, prompts and process listings.</p>
+<p><strong>Applies to</strong></p><ul class="compact">
+<li class="mono">aisha</li></ul>
+
+<p><strong>Impact.</strong> The login name travels with many ordinary operations and appears in logs, prompts and process listings.</p>
+<p><strong>Recommendation.</strong> Use a generic service account name for anything that runs unattended.</p>
+
+<details><summary>Evidence attributes</summary><table>
+<tr><th>risk_band</th><td class="mono">low</td></tr><tr><th>risk_formula</th><td class="mono">score = (0.40*impact &#43; 0.20*exploitability &#43; 0.20*exposure &#43; 0.10*privilege)*25 &#43; sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.</td></tr><tr><th>risk_raw</th><td class="mono">37.5</td></tr><tr><th>risk_score</th><td class="mono">33.8</td></tr><tr><th>user</th><td class="mono">aisha</td></tr>
+</table></details>
+</section>
+<section class="finding">
+<h3><span class="badge sev-low">low</span>
+Account with no last-login record</h3>
+<table>
+<tr><th>Rule</th><td class="mono">ACC-003</td>
+    <th>Module</th><td class="mono">accounts</td></tr>
+<tr><th>Risk</th><td>19 (low)</td>
+    <th>State</th><td>inferred</td></tr>
+<tr><th>Exposure</th><td>local</td>
+    <th>Privilege</th><td>user</td></tr>
+<tr><th>Confidence</th><td>possible</td>
+    <th>Sensitivity</th><td>internal</td></tr>
+</table>
+<p>An interactive account with no observable last-login record may be dormant, which keeps an unnecessary authentication path alive.</p>
+<p><strong>Applies to</strong></p><ul class="compact">
+<li class="mono">aisha</li></ul>
+
+<p><strong>Impact.</strong> An interactive account with no observable last-login record may be dormant, which keeps an unnecessary authentication path alive.</p>
+<p><strong>Recommendation.</strong> Confirm the account is still required; disable or remove it otherwise.</p>
+
+<details><summary>Evidence attributes</summary><table>
+<tr><th>home</th><td class="mono">/home/aisha</td></tr><tr><th>risk_band</th><td class="mono">low</td></tr><tr><th>risk_formula</th><td class="mono">score = (0.40*impact &#43; 0.20*exploitability &#43; 0.20*exposure &#43; 0.10*privilege)*25 &#43; sensitivity_bonus*10; then * confidence_weight. Inputs scored 0-4.</td></tr><tr><th>risk_raw</th><td class="mono">47.5</td></tr><tr><th>risk_score</th><td class="mono">19.0</td></tr><tr><th>shell</th><td class="mono">/bin/bash</td></tr>
+</table></details>
+</section>
+
+
+
+<h2>Secret material on disk</h2>
+<div class="note"><strong>No secret values are stored in this report.</strong>
+Each is recorded as a salted fingerprint, its location and its length.</div>
+<table><tr><th>Type</th><th>Location</th><th>Field</th><th>Fingerprint</th><th>Length</th></tr>
+<tr><td>token</td><td class="mono">/home/aisha/.aws/credentials:3</td>
+<td class="mono">aws_secret_access_key</td><td class="mono">0a1b2c3d4e5f60718293a4b5c6d7e8f</td>
+<td>40</td></tr>
+</table>
+
+
+<h2>Package sources</h2>
+<table><tr><th>Provider</th><th>URI</th><th>Trust</th><th>Keys</th><th>Enabled</th></tr>
+<tr><td>apt</td><td class="mono">http://archive.ubuntu.com/ubuntu</td>
+<td>official</td><td>3</td><td>true</td></tr>
+<tr><td>pip</td><td class="mono">https://pypi.org/simple</td>
+<td>official</td><td>0</td><td>true</td></tr>
+</table>
+
+
+<h2>Module coverage</h2>
+<table><tr><th>Module</th><th>Status</th><th>Assets</th><th>Findings</th><th>Detail</th></tr>
+<tr><td>User and Account Audit</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Logging and Local Artifacts</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Binary Integrity</td>
+<td class="skip">skipped</td>
+<td>0</td><td>0</td><td>requires depth 3 (running at 2)</td></tr>
+<tr><td>Browser and User Application Exposure</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Cloud and Infrastructure Identity</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Git and Developer Identity</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Environment Variables</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>File Permissions</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Filesystem Exposure</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Host Identity</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Metadata Exposure</td>
+<td class="skip">skipped</td>
+<td>0</td><td>0</td><td>requires depth 3 (running at 2)</td></tr>
+<tr><td>Network Exposure</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>OS Security Posture</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Package Source Audit</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Persistence and Startup</td>
+<td class="skip">skipped</td>
+<td>0</td><td>0</td><td>requires depth 3 (running at 2)</td></tr>
+<tr><td>Process and Service Audit</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Software Provenance</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>SSH and Remote Access</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Secret Detection</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Shell and Terminal Exposure</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Software Inventory</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Temporary and Cache Data</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+<tr><td>Development and Security Tooling</td>
+<td class="ok">complete</td>
+<td>0</td><td>0</td><td></td></tr>
+</table>
+
