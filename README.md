@@ -3,7 +3,7 @@
 <!-- doc metadata
 built from github.com/QYVORA/qyvora-amina  (Go; binary v0.1.0 baseline)
 shared terminal: qyvora-tui v0.7.1  (F1 capability view, activity, forms, adaptive layout)
-doc updated: 2026-10-01
+doc updated: 2026-10-03
 -->
 
 **Operational Security & Host Exposure Assessment Framework**
@@ -134,11 +134,10 @@ Current simulation result: **5 findings, max risk 83, risk band high**.
 | PERM-003 | Sensitive file is world-writable | high |
 | CLD-002 | Cloud credential file present | high |
 | ACC-001 | Interactive login shell for a service account | medium |
-| ACC-004 | Account with a human name in the GECOS field | medium |
 | ART-001 | Log or artifact directory readable beyond its owner | medium |
 | IDN-003 | Git author identity configured | medium |
 | META-001 | Document embeds author or organisation metadata | medium |
-| META-002 | Identity-bearing document readable by other accounts | medium |
+| META-002 | Document with embedded identity metadata is readable by other accounts | medium |
 | NET-005 | Listener on a VPN or virtual interface | medium |
 | PER-002 | Shell profile sources an external or generated file | medium |
 | PRC-002 | Process running with an unexpected working directory | medium |
@@ -154,6 +153,7 @@ Current simulation result: **5 findings, max risk 83, risk band high**.
 | CLD-001 | Cloud provider configuration present | low |
 | IDN-001 | Hostname discloses a name or identifier | low |
 | ACC-003 | Account with no last-login record | low |
+| ACC-004 | Account with a human name in the GECOS field | low |
 | SW-001 | Installed package records a generic or absent origin | low |
 | SW-002 | Installed software is associated with a development project or employer | low |
 | SW-003 | Software installed outside the system package manager | low |
@@ -258,7 +258,7 @@ report records where each setting came from.
 
 ## TUI integration
 
-Amina uses the shared `qyvora-tui` v0.7.0 console. A bare invocation opens the
+Amina uses the shared `qyvora-tui` v0.7.1 console. A bare invocation opens the
 interactive session; typed commands are executed in-process through the same
 `ExecuteArgs` entry point the CLI uses, so the console and the command line
 cannot drift apart. The registry above is the F1 capability view's data source.
@@ -302,10 +302,6 @@ checked directly so a failure names the cause.
 
 ## Known limitations
 
-- Live-host cross-builds for Windows and for Unix targets without
-  `syscall.Dup2` (linux/arm64, riscv64, loong64, solaris) require
-  `qyvora-tui` **v0.7.1 or later**; v0.7.0 is the current release and carries
-  build-tag and `Dup2` bugs that are already fixed in the shared repository.
 - Cloud and browser collectors read on-disk configuration and data directories.
   They do not call provider APIs and cannot report live account state.
 - MAC metadata is read from container formats (e.g. OLE/Office); full EXIF and
@@ -320,13 +316,18 @@ checked directly so a failure names the cause.
   reproducible the way simulation already is.
 - Remediation guidance per rule, emitted alongside the finding rather than
   inferred from it.
-- Release `qyvora-tui` v0.7.1 to unblock the full cross-build matrix.
 
 ## Links
 
-- Technical docs: repository `README.md` and `docs/`
-- Cross-project contracts: [09-technical/cross-project/](../../09-technical/cross-project/)
-- Sibling frameworks: [Aksum](../aksum/AKSUM-OVERVIEW.md) · [Amanirenas](../amanirenas/AMANIRENAS-OVERVIEW.md) · [Anansi](../anansi/ANANSI-OVERVIEW.md) · [Imhotep](../imhotep/IMHOTEP-OVERVIEW.md) · [Jabari](../jabari/JABARI-OVERVIEW.md) · [Kush](../kush/KUSH-OVERVIEW.md) · [Mansa](../mansa/MANSA-OVERVIEW.md) · [Nzinga](../nzinga/NZINGA-OVERVIEW.md) · [Sekhmet](../sekhmet/SEKHMET-OVERVIEW.md) · [Shaka](../shaka/SHAKA-OVERVIEW.md) · [Sundiata](../sundiata/SUNDIATA-OVERVIEW.md) · [Timbuktu](../timbuktu/TIMBUKTU-OVERVIEW.md) · [Toha3ee](../toha3ee/TOHA3EE-OVERVIEW.md)
+- Documentation index: [docs/](docs/README.md)
+- CLI reference: [docs/CLI.md](docs/CLI.md)
+- Configuration: [docs/CONFIGURATION.md](docs/CONFIGURATION.md)
+- Modules: [docs/MODULES.md](docs/MODULES.md) · Rules: [docs/RULES.md](docs/RULES.md)
+- Output and event stream: [docs/OUTPUT.md](docs/OUTPUT.md)
+- Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Installing and updating: [docs/UPDATING.md](docs/UPDATING.md)
+- Development: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
+- QYVORA organisation: https://github.com/QYVORA
 
 ---
 

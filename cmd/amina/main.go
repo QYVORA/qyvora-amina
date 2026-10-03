@@ -475,13 +475,18 @@ FLAGS
   --depth string          quick | standard | deep | numeric level (default "standard")
   --format string         terminal | json | yaml | markdown | html (default "terminal")
   -o, --output string     write the report to a file instead of stdout
+  --target string         label recorded in the report
+  --profile string        operator profile recorded in the report
   --events string         JSONL event stream: stdout, stderr, or a file path
   --min-severity string   omit findings below this severity
   --fail-on string        exit non-zero when a finding reaches this severity
-  --include strings       run only these modules
-  --exclude strings       skip these modules
+  --include string        comma-separated modules to run only
+  --exclude string        comma-separated modules to skip
   --simulate              assess the built-in synthetic dataset instead of this host
   --fixture string        fixture to simulate, or a path to a recorded snapshot
+  --offline               make no network access
+  --parallelism int       concurrent collectors (0 selects a default)
+  --remote                assess a remote host (unsupported; always refused)
   --color / --no-color    force colour on or off (NO_COLOR is always honoured)
   --timeout int           abort the assessment after N seconds
   --config string         configuration file (default: discovered alongside the binary)

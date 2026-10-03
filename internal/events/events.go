@@ -26,8 +26,12 @@ const SchemaVersion = "1.0"
 const (
 	AssessmentStarted   = "assessment.started"
 	AssessmentCompleted = "assessment.completed"
+	SimulationLoaded    = "simulation.loaded"
+	HostDetected        = "host.detected"
 	ModuleStarted       = "module.started"
 	ModuleCompleted     = "module.completed"
+	ModuleSkipped       = "module.skipped"
+	ModuleFailed        = "module.failed"
 	FindingDiscovered   = "finding.discovered"
 	EvidenceCollected   = "evidence.collected"
 	Warning             = "warning"
@@ -67,7 +71,8 @@ const (
 // capability document publishes this list so an orchestrator can validate an
 // event stream against the framework that claims to have produced it.
 var Verbs = []string{
-	AssessmentStarted, AssessmentCompleted, ModuleStarted, ModuleCompleted,
+	AssessmentStarted, AssessmentCompleted, SimulationLoaded, HostDetected,
+	ModuleStarted, ModuleCompleted, ModuleSkipped, ModuleFailed,
 	AssetDiscovered, FindingDiscovered, EvidenceCollected,
 	CapabilityDegraded, PrivilegeRequired, Warning, Error, ReportGenerated,
 	IdentityDiscovered, AccountDiscovered, RemoteAccessChecked, NetworkExamined,
