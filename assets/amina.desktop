@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=AMINA
+GenericName=Operational Security Assessment Framework
+Comment=Operational security assessment for the local host
+Exec=@PREFIX@/bin/amina
+Icon=@PREFIX@/share/icons/hicolor/512x512/apps/amina.png
+Terminal=true
+Categories=Utility;Development;Security;
+Keywords=os;opsec;local;host;security;assessment;analysis;findings;hardening;

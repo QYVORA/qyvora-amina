@@ -60,38 +60,48 @@ install: build
 	install -m 0755 bin/$(BINARY) $(BINDIR)/$(BINARY)
 	$(MAKE) install-data
 
-# The icon and desktop entry are installed only when the checkout carries
-# them. They are not in every tree, and a missing asset must not take the
-# command itself down with it: the binary is already in place by the time
-# this runs, and a user without a menu entry still has a working tool.
+# The desktop entry and the icon are installed independently of each other. The
+# entry is the part a person uses; the icon is decoration, and this tree has no
+# amina.png to ship. Tying them together meant a missing icon silently cost the
+# menu entry too, so a missing asset could still take a working tool's
+# discoverability down with it. The binary is already in place before this runs,
+# and a user without a menu entry still has a working tool.
 install-data:
-	@if [ ! -f "$(ICON)" ] || [ ! -f "$(DESKTOP)" ]; then \
-		echo "amina: $(ICON) or $(DESKTOP) missing; installed the command without a menu entry."; \
-	else \
-		install -d $(ICONDIR) $(PIXMAPDIR) $(APPDIR); \
-		install -m 0644 $(ICON) $(ICONDIR)/amina.png; \
-		install -m 0644 $(ICON) $(PIXMAPDIR)/amina.png; \
+	@if [ -f "$(DESKTOP)" ]; then \
+		install -d $(APPDIR); \
 		sed -e 's|@PREFIX@|$(PREFIX)|g' $(DESKTOP) > $(APPDIR)/amina.desktop; \
 		chmod 0644 $(APPDIR)/amina.desktop; \
 		update-desktop-database $(APPDIR) 2>/dev/null || true; \
+	else \
+		echo "amina: $(DESKTOP) missing; installed the command without a menu entry."; \
+	fi
+	@if [ -f "$(ICON)" ]; then \
+		install -d $(ICONDIR) $(PIXMAPDIR); \
+		install -m 0644 $(ICON) $(ICONDIR)/amina.png; \
+		install -m 0644 $(ICON) $(PIXMAPDIR)/amina.png; \
 		gtk-update-icon-cache -f $(DESTDIR)$(PREFIX)/share/icons/hicolor 2>/dev/null || true; \
-		echo "amina installed to $(BINDIR) with icon and desktop entry."; \
+	else \
+		echo "amina: $(ICON) missing; menu entry installed without an icon."; \
 	fi
 
 install-user: build
 	install -d $(USERBIN)
 	install -m 0755 bin/$(BINARY) $(USERBIN)/$(BINARY)
-	@if [ ! -f "$(ICON)" ] || [ ! -f "$(DESKTOP)" ]; then \
-		echo "amina: $(ICON) or $(DESKTOP) missing; installed the command without a menu entry."; \
-	else \
-		install -d $(USERICON) $(USERPIXMAP) $(USERAPP); \
-		install -m 0644 $(ICON) $(USERICON)/amina.png; \
-		install -m 0644 $(ICON) $(USERPIXMAP)/amina.png; \
+	@if [ -f "$(DESKTOP)" ]; then \
+		install -d $(USERAPP); \
 		sed -e 's|@PREFIX@|$(HOME)/.local|g' $(DESKTOP) > $(USERAPP)/amina.desktop; \
 		chmod 0644 $(USERAPP)/amina.desktop; \
 		update-desktop-database $(USERAPP) 2>/dev/null || true; \
+	else \
+		echo "amina: $(DESKTOP) missing; installed the command without a menu entry."; \
+	fi
+	@if [ -f "$(ICON)" ]; then \
+		install -d $(USERICON) $(USERPIXMAP); \
+		install -m 0644 $(ICON) $(USERICON)/amina.png; \
+		install -m 0644 $(ICON) $(USERPIXMAP)/amina.png; \
 		gtk-update-icon-cache -f $(HOME)/.local/share/icons/hicolor 2>/dev/null || true; \
-		echo "amina installed to $(USERBIN) with icon and desktop entry."; \
+	else \
+		echo "amina: $(ICON) missing; menu entry installed without an icon."; \
 	fi
 	@echo "Add $$HOME/.local/bin to your PATH if it is not already there."
 
