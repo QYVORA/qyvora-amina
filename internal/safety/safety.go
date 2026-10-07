@@ -43,6 +43,7 @@ type OperationMetadata struct {
 	Description  string           `json:"description"`
 	Class        Class            `json:"class"`
 	Risk         models.RiskLevel `json:"risk"`
+	NoiseLevel   models.NoiseLevel   `json:"noise_level"`
 	TargetType   string           `json:"target_type"`
 	AuthRequired bool             `json:"authorization_required"`
 	Confirm      bool             `json:"confirmation_required"`
@@ -59,7 +60,7 @@ var (
 		Description: "Read local identity, account, network, software, provenance, " +
 			"filesystem, shell, developer, cloud, process, persistence, tooling, " +
 			"artifact, posture and application state from this machine.",
-		Class: ClassDiscovery, Risk: models.RiskS1, TargetType: "host",
+		Class: ClassDiscovery, Risk: models.RiskS1, NoiseLevel: models.NoiseLevelPassive, TargetType: "host",
 		AuthRequired: false, Confirm: false, ChangesState: false,
 		Reversible: true, ReadOnly: true,
 	}
