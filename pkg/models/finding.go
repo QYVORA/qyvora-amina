@@ -20,6 +20,15 @@ const (
 	StatusInformational FindingStatus = "informational"
 )
 
+// Tier represents the capability tier that generated a finding
+type Tier string
+
+const (
+	TierRecon        Tier = "recon"        // Tier 1: Discovery and enumeration
+	TierTechnique    Tier = "technique"    // Tier 2: Vulnerability identification
+	TierExploitation Tier = "exploitation" // Tier 3: Active exploitation
+)
+
 // Finding is the normalized representation of an operational-security
 // condition. Beyond the ecosystem baseline it carries the explicit risk inputs
 // (exposure scope, privilege, sensitivity) so every score is reproducible from
@@ -38,6 +47,7 @@ type Finding struct {
 	Confidence     Confidence        `json:"confidence"`
 	Status         FindingStatus     `json:"status"`
 	State          State             `json:"state"`
+	Tier           Tier              `json:"tier,omitempty"` // Capability tier that generated this finding
 	Exposure       ExposureScope     `json:"exposure"`
 	Privilege      Privilege         `json:"privilege"`
 	Sensitivity    Sensitivity       `json:"sensitivity"`
@@ -47,6 +57,20 @@ type Finding struct {
 	Attributes     map[string]string `json:"attributes,omitempty"`
 	References     []string          `json:"references,omitempty"`
 	Timestamp      time.Time         `json:"timestamp"`
+}
+
+// TierPrefix returns a display prefix for the finding's tier
+func (f *Finding) TierPrefix() string {
+	switch f.Tier {
+	case TierRecon:
+		return "[RECON]"
+	case TierTechnique:
+		return "[TECHNIQUE]"
+	case TierExploitation:
+		return "[EXPLOIT]"
+	default:
+		return ""
+	}
 }
 
 // Fingerprint returns a stable identity key for the finding (SHA-256 of

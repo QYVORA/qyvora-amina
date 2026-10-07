@@ -124,6 +124,16 @@ const (
 	RiskS4 RiskLevel = "S4" // destructive / irreversible
 )
 
+// NoiseLevel defines the OPSEC footprint of an operation
+type NoiseLevel string
+
+const (
+	NoiseLevelPassive    NoiseLevel = "passive"    // No active probing, analysis only
+	NoiseLevelLow        NoiseLevel = "low"        // Minimal interaction, basic enumeration
+	NoiseLevelModerate   NoiseLevel = "moderate"   // Active testing, noticeable
+	NoiseLevelAggressive NoiseLevel = "aggressive" // Exploitation attempts, highly visible
+)
+
 // Rank orders risk levels.
 func (r RiskLevel) Rank() int {
 	switch r {
