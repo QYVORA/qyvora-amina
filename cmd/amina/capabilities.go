@@ -241,6 +241,7 @@ func runTUI(args []string) int {
 		Runner:       runner,
 		Title:        "QYVORA / " + strings.ToUpper(version.Framework),
 		Version:      version.Version,
+		Banner:       tui.ToolBanner("AMINA", "Operational Security & Host Exposure Assessment Framework"),
 		NoColor:      noColor,
 		Capabilities: caps,
 	})

@@ -3,7 +3,7 @@ module github.com/QYVORA/qyvora-amina
 go 1.26.5
 
 require (
-	github.com/QYVORA/qyvora-tui v0.9.0
+	github.com/QYVORA/qyvora-tui v0.10.0
 	github.com/muesli/termenv v0.16.0
 	go.yaml.in/yaml/v3 v3.0.5
 )
