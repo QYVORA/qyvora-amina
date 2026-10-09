@@ -4,9 +4,13 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
+
+// semverTag matches the release tag format vMAJOR.MINOR.PATCH.
+var semverTag = regexp.MustCompile(`^v[0-9]+\.[0-9]+\.[0-9]+`)
 
 // The CLI is the contract every other tool integrates against, so the things
 // below are tested rather than assumed. Each of them is a behaviour a caller
@@ -265,8 +269,12 @@ func TestVersionAnswersTheSharedContract(t *testing.T) {
 	if info.Framework != "amina" {
 		t.Errorf("framework = %q, want %q", info.Framework, "amina")
 	}
-	if !strings.HasPrefix(info.Version, "v") {
-		t.Errorf("version = %q, want a semver tag", info.Version)
+	// The test binary is compiled without ldflags, so the uniform version
+	// default applies and an unstamped build reports the documented "dev"
+	// sentinel. Release artifacts stamp a vMAJOR.MINOR.PATCH tag. Anything
+	// else (empty, a raw commit, a stale hardcoded string) breaks the contract.
+	if info.Version != "dev" && !semverTag.MatchString(info.Version) {
+		t.Errorf("version = %q, want %q or a vMAJOR.MINOR.PATCH tag", info.Version, "dev")
 	}
 }
 

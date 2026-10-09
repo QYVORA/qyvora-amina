@@ -161,7 +161,7 @@ findings:
     timestamp: "2023-11-14T22:13:20Z"
     title: Account with no last-login record
 framework: amina
-framework_version: v0.1.0
+framework_version: dev
 generated_at: "2023-11-14T22:13:20Z"
 host:
   arch: amd64
@@ -173,7 +173,7 @@ host:
   platform: linux
   shell: /bin/bash
   timezone: UTC
-id: rep-196f434e264d42e79bee766f
+id: rep-097181321d0ba035c31eca84
 identities:
   - canonical: aisha@corp.example
     domains:
@@ -191,7 +191,7 @@ identities:
       - email
     strength: 23
     summary: Identity aisha@corp.example is disclosed by 1 signal across 1 kind of observation, from 1 source and 1 domain.
-integrity: sha256:196f434e264d42e79bee766f4894709baaf3abaa1e876fe18a79275f5c593869
+integrity: sha256:097181321d0ba035c31eca841b1c563f7d455f1585a7896cdecb0f3968a76861
 limitations:
   - 'Binary Integrity: not assessed (requires depth 3 (running at 2))'
   - 'Metadata Exposure: not assessed (requires depth 3 (running at 2))'

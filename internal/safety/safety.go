@@ -38,18 +38,18 @@ const (
 
 // OperationMetadata describes one operation's safety contract.
 type OperationMetadata struct {
-	ID           string           `json:"id"`
-	Name         string           `json:"name"`
-	Description  string           `json:"description"`
-	Class        Class            `json:"class"`
-	Risk         models.RiskLevel `json:"risk"`
-	NoiseLevel   models.NoiseLevel   `json:"noise_level"`
-	TargetType   string           `json:"target_type"`
-	AuthRequired bool             `json:"authorization_required"`
-	Confirm      bool             `json:"confirmation_required"`
-	ChangesState bool             `json:"changes_state"`
-	Reversible   bool             `json:"reversible"`
-	ReadOnly     bool             `json:"read_only"`
+	ID           string            `json:"id"`
+	Name         string            `json:"name"`
+	Description  string            `json:"description"`
+	Class        Class             `json:"class"`
+	Risk         models.RiskLevel  `json:"risk"`
+	NoiseLevel   models.NoiseLevel `json:"noise_level"`
+	TargetType   string            `json:"target_type"`
+	AuthRequired bool              `json:"authorization_required"`
+	Confirm      bool              `json:"confirmation_required"`
+	ChangesState bool              `json:"changes_state"`
+	Reversible   bool              `json:"reversible"`
+	ReadOnly     bool              `json:"read_only"`
 }
 
 // Known operations.

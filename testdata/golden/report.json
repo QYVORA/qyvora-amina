@@ -1,8 +1,8 @@
 {
   "schema": "qyvora.amina.report/v1",
-  "id": "rep-196f434e264d42e79bee766f",
+  "id": "rep-097181321d0ba035c31eca84",
   "framework": "amina",
-  "framework_version": "v0.1.0",
+  "framework_version": "dev",
   "generated_at": "2023-11-14T22:13:20Z",
   "target": {
     "id": "sim-builtin",
@@ -544,7 +544,7 @@
     "Persistence and Startup: not assessed (requires depth 3 (running at 2))",
     "5 rule(s) not evaluated (requires depth 3, running at 2): META-001, META-002, PER-001, PER-002, PER-003"
   ],
-  "integrity": "sha256:196f434e264d42e79bee766f4894709baaf3abaa1e876fe18a79275f5c593869",
+  "integrity": "sha256:097181321d0ba035c31eca841b1c563f7d455f1585a7896cdecb0f3968a76861",
   "redaction": {
     "strategy": "fingerprint-only",
     "values_retained": false,
