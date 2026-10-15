@@ -1,14 +1,11 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
-
-	tui "github.com/QYVORA/qyvora-tui"
 
 	"github.com/QYVORA/qyvora-amina/internal/config"
 	"github.com/QYVORA/qyvora-amina/internal/exitcode"
@@ -207,70 +204,6 @@ func durationHint(minDepth int) string {
 		return "moderate"
 	default:
 		return "fast"
-	}
-}
-
-// runTUI launches the shared interactive interface.
-//
-// A non-terminal is not an error. Being piped is a normal way to run a tool, so
-// the TUI falls back to a one-shot assessment that produces exactly the output
-// the command line would have produced.
-func runTUI(args []string) int {
-	// The registry is normalised through the same function the TUI would use on
-	// `amina capabilities -o json`, so there is no second hand-maintained list.
-	//
-	// The list is handed to CapabilitiesFrom rather than to NormalizeCapabilities
-	// over an encoded document: this registry is already the tool's own shape,
-	// and encoding it into a document only to decode it again is how a tool ends
-	// up normalising something it already normalised.
-	caps, err := tui.CapabilitiesFrom(version.Framework, Capabilities().Capabilities)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "amina: %v\n", err)
-		return exitcode.Runtime
-	}
-
-	noColor := os.Getenv("NO_COLOR") != ""
-	runner := &tui.InProcessRunner{
-		Execute:   ExecuteArgs,
-		ToolName:  version.Framework,
-		Prefix:    []string{"assess"},
-		EventFlag: "--events", EventValue: "stdout",
-		Meta: commands(),
-	}
-	code, runErr := tui.Run(tui.Config{
-		Runner:       runner,
-		Title:        "QYVORA / " + strings.ToUpper(version.Framework),
-		Version:      version.Version,
-		Banner:       tui.ToolBanner("AMINA", "Operational Security & Host Exposure Assessment Framework"),
-		NoColor:      noColor,
-		Capabilities: caps,
-	})
-	if runErr != nil {
-		if tui.IsNotInteractive(runErr) {
-			// Not a terminal. Fall back rather than fail.
-			return runAssess(context.Background(), args)
-		}
-		fmt.Fprintf(os.Stderr, "amina: %v\n", runErr)
-		return exitcode.Runtime
-	}
-	return code
-}
-
-// commands describes the invocations the TUI offers.
-//
-// Subs are argument vectors, not usage strings: the TUI runs them verbatim, so
-// this is a list of things a user can press rather than documentation.
-func commands() []tui.Command {
-	return []tui.Command{
-		{Name: "assess", Short: "Assess this host"},
-		{Name: "assess", Short: "Quick assessment", Subs: []string{"--depth", "quick"}},
-		{Name: "assess", Short: "Deep assessment", Subs: []string{"--depth", "deep"}},
-		{Name: "assess", Short: "Report as JSON", Subs: []string{"--format", "json"}},
-		{Name: "assess", Short: "Report as Markdown", Subs: []string{"--format", "markdown", "-o", "report.md"}},
-		{Name: "assess", Short: "Report as HTML", Subs: []string{"--format", "html", "-o", "report.html"}},
-		{Name: "assess", Short: "Simulated assessment", Subs: []string{"--simulate"}},
-		{Name: "capabilities", Short: "List assessment capabilities", Subs: []string{"-o", "json"}},
-		{Name: "version", Short: "Print the version"},
 	}
 }
 

@@ -37,9 +37,8 @@ import (
 
 // init installs the module registry's name validator.
 //
-// This is an init rather than a line in main because ExecuteArgs is not only
-// the command line: it is the in-process entry point the shared TUI calls, and
-// the TUI has its own ways to reach the same flags. Validating in one place that
+// This is an init rather than a line in main because ExecuteArgs is the single
+// entry point every invocation passes through. Validating in one place that
 // every entry point passes through is what keeps a misspelled --include a usage
 // error everywhere instead of only on the terminal.
 func init() {
@@ -54,18 +53,16 @@ func main() {
 
 // ExecuteArgs runs one invocation and returns the process exit code.
 //
-// It is the in-process entry point the shared TUI calls. Keeping the whole CLI
-// behind this function is what lets `amina tui` execute assessments in-process
-// while the same code path serves a plain command line.
+// Keeping the whole CLI behind this function means the command line and any
+// in-process caller share one code path.
 func ExecuteArgs(ctx context.Context, args []string) int {
 	if len(args) == 0 {
-		// No arguments at all is the fleet's "let me look around" invocation.
-		// Without a terminal it is a plain assessment, so `amina > report.txt`
-		// still produces a report rather than a screenful of escape codes.
-		if isTerminal(os.Stdout) {
-			return runTUI(nil)
-		}
-		return runAssess(ctx, nil)
+		// The bare invocation is one-shot CLI only: print usage rather than
+		// drop into an interactive interface. The per-tool TUI is disabled
+		// pending the redirect of qyvora-tui to the future AI orchestration
+		// layer.
+		usage(os.Stdout)
+		return exitcode.Success
 	}
 
 	switch args[0] {
@@ -78,113 +75,16 @@ func ExecuteArgs(ctx context.Context, args []string) int {
 		return runCapabilities(args[1:])
 	case "update":
 		return runUpdate(ctx, args[1:])
-	case "tui":
-		return runTUI(args[1:])
 	case "assess", "scan", "report":
 		return runAssess(ctx, args[1:])
 	default:
 		if strings.HasPrefix(args[0], "-") {
-			return runMaybeTUI(ctx, args)
+			return runAssess(ctx, args)
 		}
 		fmt.Fprintf(os.Stderr, "amina: unknown command %q\n\n", args[0])
 		usage(os.Stderr)
 		return exitcode.Usage
 	}
-}
-
-// runMaybeTUI decides between the interactive session and a one-shot assessment
-// for an invocation that names no subcommand.
-//
-// A bare `amina` on a terminal opens the interactive session. That is the
-// convention across the QYVORA fleet, and it is the right default here: the
-// report is the answer, and the session is the faster route to it.
-//
-// Machine output has to be asked for explicitly, because it cannot be inferred
-// from a terminal: `--format json`, `-o file`, `--simulate` or `--fixture` all
-// say "give me the report, not a screen". Everything else on a terminal opens
-// the session, where the same flags are available per command.
-//
-// When stdout is not a terminal this is an assessment and never a session.
-// Drawing a full-screen interface into a pipe fills it with escape codes and
-// destroys the machine-readable output the tool exists to produce.
-func runMaybeTUI(ctx context.Context, args []string) int {
-	if !isTerminal(os.Stdout) {
-		return runAssess(ctx, args)
-	}
-
-	// A machine event destination and the session are contradictory: one screen
-	// cannot hand the same bytes to a renderer and to a file. The destination
-	// used to be accepted and silently ignored, so `--events out.jsonl` opened
-	// a session and wrote no file.
-	//
-	// This is checked before anything opens the destination. Refusing after
-	// opening it would leave an empty file behind, and would truncate the
-	// previous run's events.
-	if dest, asked := requestedEventsDestination(args); asked {
-		if config.EventsDisabled(dest) {
-			return runTUI(args)
-		}
-		fmt.Fprintf(os.Stderr,
-			"amina: cannot open the interactive session with a machine event destination (--events %s); "+
-				"the session transcript is already its event stream. "+
-				"Run a command for machine output, or drop --events to use the session.\n", dest)
-		return exitcode.Usage
-	}
-
-	if requestsMachineOutput(args) {
-		return runAssess(ctx, args)
-	}
-	return runTUI(args)
-}
-
-// requestsMachineOutput reports whether args ask for a report rather than a
-// session.
-func requestsMachineOutput(args []string) bool {
-	for i := 0; i < len(args); i++ {
-		name, value, hasValue := strings.Cut(args[i], "=")
-
-		switch name {
-		case "--simulate", "--fixture":
-			return true
-		case "-o", "--output":
-			// A bare -o is still an explicit request for a file.
-			return true
-		case "--format", "-f":
-			if hasValue {
-				if value != "" && value != string(config.FormatTerminal) {
-					return true
-				}
-				continue
-			}
-			if i+1 < len(args) && args[i+1] != string(config.FormatTerminal) {
-				return true
-			}
-			i++
-		}
-	}
-	return false
-}
-
-// requestedEventsDestination finds the value given to --events, and whether the
-// flag was given at all.
-//
-// The flag must have been asked for rather than merely being set: --events off
-// means no stream and is a perfectly ordinary interactive run.
-func requestedEventsDestination(args []string) (string, bool) {
-	for i := 0; i < len(args); i++ {
-		name, value, hasValue := strings.Cut(args[i], "=")
-		if name != "--events" && name != "-events" {
-			continue
-		}
-		if hasValue {
-			return value, true
-		}
-		if i+1 < len(args) && !strings.HasPrefix(args[i+1], "-") {
-			return args[i+1], true
-		}
-		return config.EventStreamStdout, true
-	}
-	return "", false
 }
 
 // runVersion prints the build identity.
@@ -464,7 +364,6 @@ func usage(w *os.File) {
 
 USAGE
   amina [assess] [flags]
-  amina tui
   amina capabilities [-o json]
   amina update [flags]
   amina version
