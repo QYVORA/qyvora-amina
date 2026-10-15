@@ -75,7 +75,20 @@ func ExecuteArgs(ctx context.Context, args []string) int {
 		return runCapabilities(args[1:])
 	case "update":
 		return runUpdate(ctx, args[1:])
-	case "assess", "scan", "report":
+	case "recon":
+		// Tier grammar: amina recon <module> [flags].
+		return runRecon(ctx, args[1:])
+	case "exploit":
+		fmt.Fprintln(os.Stderr,
+			"amina: exploit has no modules in this framework (amina is read-only)")
+		return exitcode.Usage
+	case "report":
+		// The report tier. Amina produces its report by running the assessment,
+		// so the bare `report` verb keeps its historical meaning.
+		return runAssess(ctx, args[1:])
+	case "assess", "scan":
+		// Canonical path is `amina recon assess`; these are backward-compat
+		// aliases so existing scripts keep working.
 		return runAssess(ctx, args[1:])
 	default:
 		if strings.HasPrefix(args[0], "-") {
@@ -86,6 +99,35 @@ func ExecuteArgs(ctx context.Context, args []string) int {
 		return exitcode.Usage
 	}
 }
+
+// runRecon dispatches the recon tier: amina recon assess|scan [flags].
+func runRecon(ctx context.Context, args []string) int {
+	if len(args) == 0 {
+		fmt.Fprint(os.Stderr, reconUsage)
+		return exitcode.Usage
+	}
+	switch args[0] {
+	case "help", "-h", "--help":
+		fmt.Fprint(os.Stdout, reconUsage)
+		return exitcode.Success
+	case "assess", "scan":
+		return runAssess(ctx, args[1:])
+	default:
+		fmt.Fprintf(os.Stderr, "amina recon: unknown module %q\n\n", args[0])
+		fmt.Fprint(os.Stderr, reconUsage)
+		return exitcode.Usage
+	}
+}
+
+// reconUsage documents the recon tier.
+const reconUsage = `amina recon — discovery and collection (the local-host assessment)
+
+USAGE
+  amina recon assess [flags]     run the host assessment
+  amina recon scan   [flags]     alias of assess
+
+Run "amina --help" for the full flag list.
+`
 
 // runVersion prints the build identity.
 //
@@ -363,10 +405,15 @@ func usage(w *os.File) {
 	_, _ = fmt.Fprint(w, `amina — operational security assessment for the local host
 
 USAGE
-  amina [assess] [flags]
-  amina capabilities [-o json]
-  amina update [flags]
-  amina version
+  amina recon assess [flags]        run the host assessment (aka amina recon scan)
+  amina exploit                     active exploitation (amina has no exploit modules)
+  amina report                      produce the assessment report (alias of recon assess)
+  amina capabilities [-o json]      machine-readable capability contract
+  amina update [flags]              self-update from a verified release
+  amina version                     print the build identity
+
+Legacy spellings "amina assess", "amina scan" and a leading flag (amina --simulate)
+remain supported.
 
 Amina reads the host and reports what it found. It never modifies the host.
 
