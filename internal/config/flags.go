@@ -172,10 +172,12 @@ func (b boolFlag) Set(s string) error {
 // IsBoolFlag lets the flag be written without a value.
 func (b boolFlag) IsBoolFlag() bool { return true }
 
-const flagUsage = `usage: amina [assess] [flags]
+const flagUsage = `usage: amina recon assess [flags]
 
-  amina [assess] [flags]      assess this host and write a report
-  amina tui                   interactive interface
+  amina recon assess [flags]   assess this host and write a report
+  amina recon scan   [flags]   alias of assess
+  amina exploit                report that exploitation has no modules
+  amina report                 render the assessment report
   amina capabilities [-o json] print the capability registry
   amina version                print the version
 
