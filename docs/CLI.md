@@ -35,4 +35,5 @@ amina <tier> <module> [<action>] [target] [flags]
 | `amina capabilities` | Machine-readable capability contract |
 | `amina update` | Self-update |
 | `amina version` | Print version |
+| `amina script <file>` | Run a `.qs` script with the shared scripting engine (`run`/`build` subcommands) |
 
