@@ -1,3 +1,6 @@
+# Binaries
+amina
+amina.exe
 /bin/
 /reports/*
 !/reports/.gitkeep
