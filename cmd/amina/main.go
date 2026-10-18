@@ -110,7 +110,7 @@ func runRecon(ctx context.Context, args []string) int {
 	}
 	switch args[0] {
 	case "help", "-h", "--help":
-		fmt.Fprint(os.Stdout, reconUsage)
+		_, _ = fmt.Fprint(os.Stdout, reconUsage)
 		return exitcode.Success
 	case "assess", "scan":
 		return runAssess(ctx, args[1:])

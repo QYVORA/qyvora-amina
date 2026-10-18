@@ -110,7 +110,7 @@ type aminaBinding struct {
 	allow  bool
 	cfg    map[string]string
 	last   *pipeline.Result
-	lastID string
+	_ string
 }
 
 var _ binding.Binding = (*aminaBinding)(nil)
@@ -130,7 +130,7 @@ func (b *aminaBinding) AllowShellOut() bool { return b.allow }
 func (b *aminaBinding) Call(capabilityID string, args []binding.Value) (binding.Value, error) {
 	switch capabilityID {
 	case binding.CapEcho:
-		fmt.Fprintln(os.Stdout, asStr(args, 0))
+		_, _ = fmt.Fprintln(os.Stdout, asStr(args, 0))
 		return nil, nil
 	case binding.CapSetConfig:
 		b.cfg[asStr(args, 0)] = asStr(args, 1)
@@ -205,14 +205,14 @@ func (b *aminaBinding) show(id string) error {
 	switch strings.ToLower(strings.TrimSpace(id)) {
 	case "", "assess", "amina.assess", "last":
 		r := b.last.Report
-		fmt.Printf("Framework: %s\n", r.Framework)
+		_, _ = fmt.Printf("Framework: %s\n", r.Framework)
 		if r.Target.Name != "" {
-			fmt.Printf("Target: %s\n", r.Target.Name)
+			_, _ = fmt.Printf("Target: %s\n", r.Target.Name)
 		}
-		fmt.Printf("Findings: %d\n", len(r.Findings))
-		fmt.Printf("Modules: %d\n", len(r.Modules))
+		_, _ = fmt.Printf("Findings: %d\n", len(r.Findings))
+		_, _ = fmt.Printf("Modules: %d\n", len(r.Modules))
 		if r.Summary.Total > 0 {
-			s:=r.Summary.MaxRisk; band:=r.Summary.RiskBand; if band==""{if s>=80{band="high"}else if s>=50{band="medium"}else if s>=25{band="low"}else{band="none"}}; fmt.Printf("Risk score: %d (%s)\n", s, band)
+			s:=r.Summary.MaxRisk; band:=r.Summary.RiskBand; if band==""{if s>=80{band="high"}else if s>=50{band="medium"}else if s>=25{band="low"}else{band="none"}}; _, _ = fmt.Printf("Risk score: %d (%s)\n", s, band)
 		}
 	default:
 		return fmt.Errorf("unknown module %q", id)
