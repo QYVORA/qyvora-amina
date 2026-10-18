@@ -29,7 +29,7 @@ func runScript(args []string) int {
 		}
 		if strings.HasPrefix(a, "--allow-shellout=") {
 			v := strings.TrimPrefix(a, "--allow-shellout=")
-			allowShellOut = v=="1"||strings.ToLower(v)=="true"||strings.ToLower(v)=="yes"||strings.ToLower(v)=="on"
+			allowShellOut = v == "1" || strings.ToLower(v) == "true" || strings.ToLower(v) == "yes" || strings.ToLower(v) == "on"
 			continue
 		}
 		filtered = append(filtered, a)
@@ -106,11 +106,11 @@ func runScriptFile(path string, dryRun bool) int {
 }
 
 type aminaBinding struct {
-	ctx    context.Context
-	allow  bool
-	cfg    map[string]string
-	last   *pipeline.Result
-	_ string
+	ctx   context.Context
+	allow bool
+	cfg   map[string]string
+	last  *pipeline.Result
+	_     string
 }
 
 var _ binding.Binding = (*aminaBinding)(nil)
@@ -154,7 +154,7 @@ func (b *aminaBinding) Call(capabilityID string, args []binding.Value) (binding.
 		if !b.AllowShellOut() {
 			return nil, errors.New("script: exec requires shell-out to be enabled; pass --allow-shellout or set QYVORA_ALLOW_SHELLOUT=1")
 		}
-		_ = ExecuteArgs(b.ctx, strings.Fields(asStr(args,0)))
+		_ = ExecuteArgs(b.ctx, strings.Fields(asStr(args, 0)))
 		return nil, nil
 	default:
 		return nil, fmt.Errorf("unknown module %q", capabilityID)
@@ -212,7 +212,20 @@ func (b *aminaBinding) show(id string) error {
 		_, _ = fmt.Printf("Findings: %d\n", len(r.Findings))
 		_, _ = fmt.Printf("Modules: %d\n", len(r.Modules))
 		if r.Summary.Total > 0 {
-			s:=r.Summary.MaxRisk; band:=r.Summary.RiskBand; if band==""{if s>=80{band="high"}else if s>=50{band="medium"}else if s>=25{band="low"}else{band="none"}}; _, _ = fmt.Printf("Risk score: %d (%s)\n", s, band)
+			s := r.Summary.MaxRisk
+			band := r.Summary.RiskBand
+			if band == "" {
+				if s >= 80 {
+					band = "high"
+				} else if s >= 50 {
+					band = "medium"
+				} else if s >= 25 {
+					band = "low"
+				} else {
+					band = "none"
+				}
+			}
+			_, _ = fmt.Printf("Risk score: %d (%s)\n", s, band)
 		}
 	default:
 		return fmt.Errorf("unknown module %q", id)
@@ -264,7 +277,17 @@ func (b *aminaBinding) prop(name string) interface{} {
 	case "score", "risk_score":
 		return r.Summary.MaxRisk
 	case "level", "risk_level":
-		s:=r.Summary.MaxRisk; if s>=80{return "high"}; if s>=50{return "medium"}; if s>=25{return "low"}; return "none"
+		s := r.Summary.MaxRisk
+		if s >= 80 {
+			return "high"
+		}
+		if s >= 50 {
+			return "medium"
+		}
+		if s >= 25 {
+			return "low"
+		}
+		return "none"
 	case "duration_ms":
 		return r.DurationMS
 	default:
