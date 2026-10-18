@@ -3,6 +3,7 @@ module github.com/QYVORA/qyvora-amina
 go 1.26.5
 
 require (
+	github.com/QYVORA/qyvora-script v0.1.0
 	github.com/QYVORA/qyvora-tui v0.11.0
 	github.com/muesli/termenv v0.16.0
 	go.yaml.in/yaml/v3 v3.0.5
@@ -36,3 +37,5 @@ require (
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
 )
+
+replace github.com/QYVORA/qyvora-script => ../../shared/qyvora-script

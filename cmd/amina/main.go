@@ -90,6 +90,8 @@ func ExecuteArgs(ctx context.Context, args []string) int {
 		// Canonical path is `amina recon assess`; these are backward-compat
 		// aliases so existing scripts keep working.
 		return runAssess(ctx, args[1:])
+	case "script":
+		return runScript(args[1:])
 	default:
 		if strings.HasPrefix(args[0], "-") {
 			return runAssess(ctx, args)

@@ -2,3 +2,6 @@
 /reports/*
 !/reports/.gitkeep
 *.tmp
+
+# Script engine output
+amina-report.json
