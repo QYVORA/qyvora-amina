@@ -25,6 +25,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/QYVORA/qyvora-amina/internal/banner"
 	"github.com/QYVORA/qyvora-amina/internal/config"
 	"github.com/QYVORA/qyvora-amina/internal/events"
 	"github.com/QYVORA/qyvora-amina/internal/exitcode"
@@ -404,7 +405,10 @@ func binaryDir() string {
 var _ = config.FormatNames
 
 func usage(w *os.File) {
-	_, _ = fmt.Fprint(w, `amina — operational security assessment for the local host
+	_, _ = fmt.Fprint(w, banner.Render()+
+		"\n\n  "+banner.Tagline+" — "+version.CompanyName+
+		"\n  "+version.CompanyURL+"\n  Built in "+version.CompanyCity+"\n\n"+
+		`amina — operational security assessment for the local host
 
 USAGE
   amina recon assess [flags]        run the host assessment (aka amina recon scan)
