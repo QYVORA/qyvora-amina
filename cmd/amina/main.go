@@ -423,6 +423,10 @@ remain supported.
 
 Amina reads the host and reports what it found. It never modifies the host.
 
+TIER GRAMMAR
+  amina <tier> <module> [<action>] [target] [flags], where <tier> is one of
+  recon, exploit, or report. Run with no arguments to print this help.
+
 FLAGS
   --depth string          quick | standard | deep | numeric level (default "standard")
   --format string         terminal | json | yaml | markdown | html (default "terminal")
