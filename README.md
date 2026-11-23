@@ -2,7 +2,7 @@
 
 <!-- doc metadata
 built from github.com/QYVORA/qyvora-amina  (Go; binary v0.1.0 baseline)
-shared terminal: qyvora-tui v0.7.1  (F1 capability view, activity, forms, adaptive layout)
+shared terminal: qyvora-tui retired in this release (per-tool TUI excluded from builds)
 doc updated: 2026-10-03
 -->
 
@@ -22,8 +22,8 @@ credential material, filesystem leakage, developer identity, cloud identity,
 metadata, persistence, and OS hardening, then turning that evidence into
 deterministic, machine-readable findings with an explicit risk score.
 
-It runs as a one-shot CLI and as a shared interactive console, with the same
-commands in both.
+It runs as a one-shot CLI. The shared interactive console is retired and
+unavailable in this release.
 
 - Repository: https://github.com/QYVORA/qyvora-amina (Go 1.26.x, MIT)
 - Status: **shipped**, v0.1.0 — 23 collectors, 52 rules, correlation, risk
@@ -36,7 +36,7 @@ commands in both.
 
 ## The assessment pipeline
 
-Amina runs a nine-stage pipeline shared by its CLI and console:
+Amina runs a nine-stage pipeline:
 
 ```
 DETECT PLATFORM → AUTHORIZE → COLLECT → CORRELATE IDENTITIES → EVALUATE RULES
@@ -73,8 +73,8 @@ Every stage that a depth limit skipped is listed in the report's
 ### Simulation mode (`--simulate`)
 
 `amina --simulate` runs the identical rule set against a built-in synthetic
-dataset, offline. It exists so the pipeline, the rules, the renderers and the
-TUI can be exercised without touching a real host.
+dataset, offline. It exists so the pipeline, the rules and the renderers can
+be exercised without touching a real host.
 
 Current simulation result: **5 findings, max risk 83, risk band high**.
 
@@ -235,7 +235,6 @@ matching the published artifact names. A checksum mismatch aborts the install.
 
 ```
 amina [assess] [flags]       run an assessment (default)
-amina tui                    open the interactive console
 amina capabilities [-o json] print the capability registry
 amina update [flags]         checksum-verified self-update
 amina version [-o json]      print the version
@@ -248,20 +247,20 @@ Flags: `--depth`, `--format`, `-o/--output`, `--events`, `--min-severity`,
 Exit codes: `0` success, `1` runtime failure, `2` usage error, `3` unsupported,
 `130` interrupted.
 
-A bare run on a terminal opens the TUI; the same run with stdout redirected
-performs the assessment instead. Requesting a machine event destination while
-running interactively is refused *before* the destination is created or
-truncated, so a refused run never destroys an existing file.
+A bare run prints CLI usage; use `amina assess` (or its alias `amina`) for an
+assessment. A machine event destination combined with an invalid invocation is
+refused *before* the destination is created or truncated, so a refused run
+never destroys an existing file.
 
 Configuration precedence is defaults → file → environment → flags, and the
 report records where each setting came from.
 
-## TUI integration
+## TUI integration (retired)
 
-Amina uses the shared `qyvora-tui` v0.7.1 console. A bare invocation opens the
-interactive session; typed commands are executed in-process through the same
-`ExecuteArgs` entry point the CLI uses, so the console and the command line
-cannot drift apart. The registry above is the F1 capability view's data source.
+The shared `qyvora-tui` console is retired and unavailable in this release:
+per-tool TUI code is excluded from builds pending its redirect to the future
+AI orchestration layer. A bare `amina` invocation prints usage. The capability
+registry above remains the machine-readable source for `amina capabilities`.
 
 ## Output formats
 
