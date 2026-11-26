@@ -12,6 +12,10 @@ doc updated: 2026-10-03
 > running on and never modifies it. The single exception is `amina update`,
 > which replaces the binary from a checksum-verified release and asks first.
 
+## Readiness
+
+**BETA.** Amina performs local-host exposure assessment with 23 collectors and 52 rules; it is read-only apart from verified self-update. Implementation exists for exploration/testing but has not received final production-readiness approval. Its owner classification is `BETA` in the [Product Registry](../../../../knowledge/qyvora-docs/07-products/PRODUCT-REGISTRY.md); shipped implementation and tags do not promote it to `AVAILABLE`.
+
 ## Overview
 
 Amina is QYVORA's open-source framework for **operational security and host
@@ -26,7 +30,7 @@ It runs as a one-shot CLI. The shared interactive console is retired and
 unavailable in this release.
 
 - Repository: https://github.com/QYVORA/qyvora-amina (Go 1.26.x, MIT)
-- Status: **shipped**, v0.1.0 — 23 collectors, 52 rules, correlation, risk
+- Status: **shipped**, v0.10.2 — 23 collectors, 52 rules, correlation, risk
   scoring, simulation mode, self-update, five output formats and reporting
   implemented and tested
 - Platforms: Linux, macOS, Windows (per-OS collectors behind build tags;
